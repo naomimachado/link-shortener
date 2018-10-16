@@ -1,0 +1,22 @@
+package com.link.shorten.service;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.link.shorten.helpers.LinkKey;
+import com.link.shorten.helpers.LinkValidate;
+import com.link.shorten.repository.LinkRepository;
+
+@CrossOrigin(origins = "*")
+@RestController
+public class LinkShortenService {
+	
+	@Autowired
+	LinkRepository linkRepository;
+	
+	LinkKey lh = new LinkKey();
+	LinkValidate lv = new LinkValidate();
+	
+
+}

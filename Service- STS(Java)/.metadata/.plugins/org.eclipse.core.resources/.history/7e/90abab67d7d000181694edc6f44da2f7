@@ -1,0 +1,23 @@
+package com.link;
+
+import static org.junit.Assert.*;
+
+import java.util.Optional;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.link.shorten.model.Link;
+import com.link.shorten.repository.LinkRepository;
+
+public class TestLinkServicesAndRepository {
+	
+	@Autowired
+	LinkRepository linkRepository;
+
+	@Test
+	public void testFindByLongUrl() {
+		Optional<Link> findLink = linkRepository.findByLongUrl("https://generatepress.com/forums/topic/centre-aligning-font-awesome/");
+	}
+
+}

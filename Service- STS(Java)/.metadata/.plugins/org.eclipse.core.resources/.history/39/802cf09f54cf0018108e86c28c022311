@@ -1,0 +1,86 @@
+package com.link.shorten.service;
+
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.link.shorten.helpers.ErrorStringsEnum;
+import com.link.shorten.helpers.LinkKey;
+import com.link.shorten.helpers.LinkValidate;
+import com.link.shorten.model.Link;
+import com.link.shorten.repository.LinkRepository;
+
+@CrossOrigin(origins = "*")
+@RestController
+public class LinkShortenService implements ErrorController {
+	
+	@Autowired
+	LinkRepository linkRepository;
+	
+	LinkKey linkKey = new LinkKey();
+	LinkValidate linkValidate = new LinkValidate();
+	private static final String PATH = "/error";
+
+	
+	@PostMapping("/api/shortenUrl")
+	public String createShortUrl(@RequestBody Link link) {
+		String longURL = link.getLongLink();
+		System.out.println(longURL);
+		String result = new String();
+		if(linkValidate.validateUrl(longURL)) {
+			Optional<Link> findLink = linkRepository.findByLongUrl(longURL);
+			if(findLink.isPresent()) {
+				Link found = findLink.get();
+				result = found.getShortLinkKey();
+			} else {
+				String generatedShortKey = linkKey.getKey();
+				Optional<Link> findShortKey = linkRepository.findByShortLinkKey(generatedShortKey);
+				while(findShortKey.isPresent()) {
+					generatedShortKey = linkKey.getKey();
+					findShortKey = linkRepository.findByShortLinkKey(generatedShortKey);
+				}
+				Link newLink = new Link(longURL, generatedShortKey);
+				linkRepository.save(newLink);
+				result = newLink.getShortLinkKey();
+			}
+			
+		} else {
+			result = ErrorStringsEnum.INVALIDURL.getErrorMessage();
+		}
+		return result;
+	}
+	
+	@GetMapping("/api/{shortKey}")
+	public RedirectView getLongUrl(@PathVariable("shortKey") String shortKey) {
+		Optional<Link> findLink = linkRepository.findByShortLinkKey(shortKey);
+		String longURL = new String();
+		if(findLink.isPresent()) {
+			longURL = findLink.get().getLongLink();
+		} else {
+//			longURL = ErrorStringsEnum.INVALIDKEY.getErrorMessage();
+			throw new NoSuchElementException();
+		}
+		return new RedirectView(longURL);
+	}
+	
+	@RequestMapping(PATH)
+	public String getError() {
+		return ErrorStringsEnum.INVALIDKEY.getErrorMessage();
+	}
+
+	@Override
+	public String getErrorPath() {
+        return PATH;
+    }
+
+}

@@ -1,0 +1,22 @@
+package com.link.shorten.helpers;
+
+import java.util.Random;
+
+public class LinkKey {
+	
+	private static final String alphaNums = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+	
+	public String getKey(String link) {
+
+		Random random = new Random();
+		int keySize = random.nextInt(12-5) + 5;
+		String key = new String();
+		
+		while(keySize >= 0) {
+			key += alphaNums.charAt(random.nextInt(alphaNums.length()));
+			keySize--;
+		}
+		
+		return key;
+	}
+}

@@ -1,0 +1,20 @@
+package com.link.shorten.helpers;
+
+import java.net.MalformedURLException;
+import java.net.URL;
+
+public class LinkValidate {
+	
+	public boolean validateUrl(String url) {
+		boolean valid = false;
+		try {
+			new URL(url);
+			valid = true;
+		} catch (MalformedURLException e) {
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
+		}
+		return valid;
+	}
+	
+}

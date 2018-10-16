@@ -1,0 +1,19 @@
+package com.link.shorten.repository;
+
+import java.util.Optional;
+
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+
+import com.link.shorten.model.Link;
+
+public interface LinkRepository extends CrudRepository<Link, Integer> {
+	
+	@Query("SELECT l FROM Link l WHERE l.longLink = :longLink")
+	Optional<Link> findByLongUrl(@Param("longLink") String longLink);
+	
+	@Query("SELECT l FROM Link l WHERE l.shortLinkKey = :shortLinkKey")
+	Optional<Link> findByShortLinkKey(@Param("shortLinkKey") String shortLinkKey);
+
+}

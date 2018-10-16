@@ -1,0 +1,34 @@
+package com.link;
+
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import com.link.shorten.model.Link;
+
+@RunWith(SpringRunner.class)
+@SpringBootTest
+public class LinkShortenerApplicationTests {
+
+	@Test
+	public void contextLoads() {
+	}
+	
+	@Test
+	public void whenFindByLongUrl_thenReturnLink() {
+	    // given
+	    Link longLink = new Link("https://github.com/suhaniladani/cs5200_summer2018_entertainment_recommendations_system"
+	    		+ "/blob/master/src/main/java/com/jpa/services/LinkService.java", "zNZgyG");
+	    entityManager.persist(longLink);
+	    entityManager.flush();
+	 
+	    // when
+	    Link found = linkRepository.findByLongUrl(longLink.getLongLink());
+	 
+	    // then
+	    assertThat(found.getLongLink())
+	      .isEqualTo(longLink.getLongLink());
+	}
+
+}

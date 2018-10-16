@@ -1,0 +1,14 @@
+package com.link.shorten.helpers;
+
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+
+public class LinkHash {
+	
+	public String getHash(String link) {
+		
+		MessageDigest digest = MessageDigest.getInstance("SHA-256");
+		byte[] hash = digest.digest(link.getBytes(StandardCharsets.UTF_8));
+	}
+
+}

@@ -1,0 +1,34 @@
+package com.link;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+
+import java.util.Optional;
+
+import org.junit.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+
+import com.link.shorten.model.Link;
+import com.link.shorten.repository.LinkRepository;
+
+public class TestLinkServicesAndRepository {
+	
+	@Autowired
+    TestEntityManager entityManager;
+	
+	@Autowired
+	LinkRepository linkRepository;
+
+	@Test
+	public void testFindByLongUrl() {
+		Link testLink = new Link("https://www.walmart.com/", "qwe54g");
+		entityManager.persist(testLink);
+		entityManager.flush();
+		
+		Optional<Link> findLink = linkRepository.findByLongUrl(testLink.getLongLink());
+		
+		assertThat(findLink.get().getLongLink().equals(testLink.getLongLink()));
+	}
+
+}

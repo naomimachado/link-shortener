@@ -1,0 +1,19 @@
+package com.link;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.link.shorten.helpers.LinkHash;
+
+@SpringBootApplication
+public class LinkShortenerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(LinkShortenerApplication.class, args);
+		
+		LinkHash lh = new LinkHash();
+		String hash = lh.getHash("for this data");
+		System.out.println("hash:" + hash);
+		
+	}
+}

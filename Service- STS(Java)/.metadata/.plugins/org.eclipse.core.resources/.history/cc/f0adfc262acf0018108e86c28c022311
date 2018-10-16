@@ -1,0 +1,19 @@
+package com.link;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.link.shorten.helpers.LinkKey;
+
+@SpringBootApplication
+public class LinkShortenerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(LinkShortenerApplication.class, args);
+		
+		LinkKey lh = new LinkKey();
+		String hash = lh.getHash("https://www.javaworld.com/article/3240006/java-language/base64-encoding-and-decoding-in-java-8.html?page=2");
+		System.out.println("hash:" + hash);
+		
+	}
+}

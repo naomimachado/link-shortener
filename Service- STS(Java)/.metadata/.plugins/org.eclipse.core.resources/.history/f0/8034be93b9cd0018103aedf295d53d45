@@ -1,0 +1,10 @@
+package com.link.shorten.model;
+
+public class LinkModel {
+	
+	int id;
+	String longLink;
+	String shortLinkHash;
+	
+	
+}

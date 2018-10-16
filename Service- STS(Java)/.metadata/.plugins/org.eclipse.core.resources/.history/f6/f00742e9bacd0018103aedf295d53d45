@@ -1,0 +1,9 @@
+package com.link.shorten.repository;
+
+import org.springframework.data.repository.CrudRepository;
+
+import com.link.shorten.model.Link;
+
+public class LinkRepository extends CrudRepository<Link, Integer> {
+
+}

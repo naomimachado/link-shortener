@@ -1,0 +1,47 @@
+package com.link.shorten.service;
+
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.link.shorten.helpers.ErrorStringsEnum;
+import com.link.shorten.helpers.LinkKey;
+import com.link.shorten.helpers.LinkValidate;
+import com.link.shorten.model.Link;
+import com.link.shorten.repository.LinkRepository;
+
+@CrossOrigin(origins = "*")
+@RestController
+public class LinkShortenService {
+	
+	@Autowired
+	LinkRepository linkRepository;
+	
+	LinkKey linkKey = new LinkKey();
+	LinkValidate linkValidate = new LinkValidate();
+	
+	@PostMapping("/api/shortenUrl")
+	public String createShortUrl(@RequestBody Link link) {
+		String longURL = link.getLongLink();
+		String result = new String();
+		if(linkValidate.validateUrl(longURL)) {
+			Optional<Link> findLink = linkRepository.findByLongUrl(longURL);
+			if(findLink.isPresent()) {
+				Link found = findLink.get();
+				result = found.getShortLinkKey();
+			} else {
+				String generateShortKey = linkKey.getKey(longURL);
+			}
+			
+		} else {
+			result = ErrorStringsEnum.INVALIDURL.getErrorMessage();
+		}
+		return result;
+	}
+	
+
+}

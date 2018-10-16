@@ -1,0 +1,118 @@
+package com.link.shorten.service;
+
+import java.util.InputMismatchException;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
+
+import com.link.shorten.helpers.ErrorStringsEnum;
+import com.link.shorten.helpers.LinkKey;
+import com.link.shorten.helpers.LinkValidate;
+import com.link.shorten.model.Link;
+import com.link.shorten.repository.LinkRepository;
+
+/**
+ * The Class LinkShortenService.
+ */
+@CrossOrigin(origins = "*")
+@RestController
+public class LinkShortenService implements ErrorController {
+	
+	/** The link repository. */
+	@Autowired
+	LinkRepository linkRepository;
+	
+	/** The link key. */
+	LinkKey linkKey = new LinkKey();
+	
+	/** The link validate. */
+	LinkValidate linkValidate = new LinkValidate();
+	
+	/** The Constant PATH. */
+	private static final String PATH = "/error";
+
+	
+	/**
+	 * Creates the short url for the given link.
+	 *
+	 * @param link the link
+	 * @return the string
+	 */
+	@PostMapping("/api/shortenUrl")
+	public String createShortUrl(@RequestBody Link link) {
+		String longURL = link.getLongLink();
+		String domainURL = "http://localhost:8080/";
+		System.out.println(longURL);
+		String result = new String();
+		if(linkValidate.validateUrl(longURL)) {
+			Optional<Link> findLink = linkRepository.findByLongUrl(longURL);
+			if(findLink.isPresent()) {
+				Link found = findLink.get();
+				result = domainURL + found.getShortLinkKey();
+			} else {
+				String generatedShortKey = linkKey.getKey();
+				Optional<Link> findShortKey = linkRepository.findByShortLinkKey(generatedShortKey);
+				while(findShortKey.isPresent()) {
+					generatedShortKey = linkKey.getKey();
+					findShortKey = linkRepository.findByShortLinkKey(generatedShortKey);
+				}
+				Link newLink = new Link(longURL, generatedShortKey);
+				linkRepository.save(newLink);
+				result = domainURL + newLink.getShortLinkKey();
+			}
+			
+		} else {
+			throw new InputMismatchException();
+		}
+		return result;
+	}
+	
+	/**
+	 * Gets the long url.
+	 * Redirects to the orignal URL
+	 *
+	 * @param shortKey the short key
+	 * @return the long url
+	 */
+	@GetMapping("/{shortKey}")
+	public RedirectView getLongUrl(@PathVariable("shortKey") String shortKey) {
+		Optional<Link> findLink = linkRepository.findByShortLinkKey(shortKey);
+		String longURL = new String();
+		if(findLink.isPresent()) {
+			longURL = findLink.get().getLongLink();
+		} else {
+//			longURL = ErrorStringsEnum.INVALIDKEY.getErrorMessage();
+			throw new NoSuchElementException();
+		}
+		return new RedirectView(longURL);
+	}
+	
+	/**
+	 * Gets the error.
+	 *
+	 * @return the error
+	 */
+	@RequestMapping(PATH)
+	public String getError() {
+		return ErrorStringsEnum.INVALID.getErrorMessage();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.springframework.boot.web.servlet.error.ErrorController#getErrorPath()
+	 */
+	@Override
+	public String getErrorPath() {
+        return PATH;
+    }
+
+}

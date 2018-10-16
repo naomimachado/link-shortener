@@ -1,0 +1,5 @@
+package com.link.shorten.service;
+
+public class LinkShortenService {
+
+}

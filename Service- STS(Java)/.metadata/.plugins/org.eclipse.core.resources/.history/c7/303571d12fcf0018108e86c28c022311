@@ -1,0 +1,5 @@
+package com.link.shorten.helpers;
+
+public enum ErrorStrings {
+	INVALIDURL("This URL is invalid! Please try again with another URL.");
+}

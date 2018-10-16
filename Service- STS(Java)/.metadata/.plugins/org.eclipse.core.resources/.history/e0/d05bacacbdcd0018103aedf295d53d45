@@ -1,0 +1,10 @@
+package com.link.shorten.helpers;
+
+public class LinkHash {
+	
+	public String getHash(String link) {
+		
+		
+	}
+
+}

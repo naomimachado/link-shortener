@@ -1,0 +1,5 @@
+package com.link.shorten.helpers;
+
+public class LinkHash {
+
+}

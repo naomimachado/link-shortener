@@ -1,0 +1,31 @@
+package com.link.shorten.helpers;
+
+import java.nio.ByteBuffer;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+
+import javax.xml.bind.DatatypeConverter;
+
+public class LinkHash {
+	
+	public String getHash(String link) {
+		
+		String hash = null;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(link.getBytes());
+		    byte[] digest = md.digest();
+		    ByteBuffer bf = ByteBuffer.wrap(digest);
+		    int num = bf.getInt();
+		    System.out.println(num);
+		    hash = DatatypeConverter
+		  	      .printHexBinary(digest).toUpperCase();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return hash;
+	}
+
+}

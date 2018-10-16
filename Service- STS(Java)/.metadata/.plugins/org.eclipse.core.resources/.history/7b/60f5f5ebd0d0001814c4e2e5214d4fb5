@@ -1,0 +1,16 @@
+package com.link.shorten.helpers;
+
+public enum ErrorStringsEnum {
+	INVALID("Invalid Request! Please check URL.");
+	
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	ErrorStringsEnum(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
+}

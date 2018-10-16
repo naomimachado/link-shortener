@@ -1,0 +1,14 @@
+package com.link.shorten.helpers;
+
+import java.util.Base64;
+
+public class LinkHash {
+	
+	public String getHash(String link) {
+		
+		String hash = Base64.getUrlEncoder().encodeToString(link.getBytes());
+		
+		return hash;
+	}
+
+}

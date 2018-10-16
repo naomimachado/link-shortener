@@ -1,0 +1,16 @@
+package com.link;
+
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+import com.link.shorten.helpers.LinkKey;
+import com.link.shorten.helpers.LinkValidate;
+
+@SpringBootApplication
+public class LinkShortenerApplication {
+
+	public static void main(String[] args) {
+		SpringApplication.run(LinkShortenerApplication.class, args);
+		
+	}
+}

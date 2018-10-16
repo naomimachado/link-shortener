@@ -1,0 +1,5 @@
+package com.link.shorten.repository;
+
+public interface LinkRepository extends CrudRepository<Link, Integer> {
+
+}

@@ -1,0 +1,44 @@
+package com.link.shorten.model;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
+@Entity
+public class Link {
+	
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private int id;
+	private String longLink;
+	private String shortLinkHash;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
+	public String getLongLink() {
+		return longLink;
+	}
+	public void setLongLink(String longLink) {
+		this.longLink = longLink;
+	}
+	public String getShortLinkHash() {
+		return shortLinkHash;
+	}
+	public void setShortLinkHash(String shortLinkHash) {
+		this.shortLinkHash = shortLinkHash;
+	}
+	public Link(int id, String longLink, String shortLinkHash) {
+		super();
+		this.id = id;
+		this.longLink = longLink;
+		this.shortLinkHash = shortLinkHash;
+	}
+	public Link() {
+		super();
+	}
+	
+}

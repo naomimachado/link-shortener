@@ -1,0 +1,17 @@
+package com.link.shorten.helpers;
+
+public enum ErrorStringsEnum {
+	INVALIDURL("This URL is invalid! Please try again with another URL."),
+	INVALIDKEY("URL not found! Check link.");
+	
+	private String errorMessage;
+
+	public String getErrorMessage() {
+		return errorMessage;
+	}
+	
+	ErrorStringsEnum(String errorMessage) {
+		this.errorMessage = errorMessage;
+	}
+	
+}
