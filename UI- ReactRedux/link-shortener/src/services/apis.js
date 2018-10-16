@@ -24,10 +24,17 @@ class ApiClass{
                     })
                 },
                 error: (resp) => {
-                    store.dispatch({
-                        type: 'ERROR',
-                        data: resp.responseText
-                    })
+                    if(resp.responseText){
+                        store.dispatch({
+                            type: 'ERROR',
+                            data: resp.responseText
+                        });
+                    } else {
+                        store.dispatch({
+                            type: 'ERROR',
+                            data: "Unable to connect to service"
+                        });
+                    }
                     store.dispatch({
                         type: 'CLEAR_SHORT_LINK',
                     })
