@@ -50,5 +50,10 @@ public class TestLinkServicesAndRepository {
 		
 		assertThat(findLink.get().getShortLinkKey().equals(testLink.getShortLinkKey()));
 	}
+	
+	@Test
+	public void testCreateShortLink() {
+		String shortLink = linkShorten.createShortUrl(null);
+	}
 
 }
